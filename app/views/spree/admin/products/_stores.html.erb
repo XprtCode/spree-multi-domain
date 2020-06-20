@@ -1,19 +1,9 @@
 <p data-hook="admin_product_form_stores" class="omega two columns">
-  <%= f.field_container :stores, class: ['form-group'] do %>
-    <%= f.label :store_ids, Spree.t(:stores) %>
-    <% if can? :modify, Spree::Store %>
-      <%= f.hidden_field :store_ids, value: @product.store_ids.join(',') %>
-    <% elsif @product.stores.any? %>
-      <ul class="text_list">
-        <% @product.stores.each do |store| %>
-          <li><%= store.name %></li>
-        <% end %>
-      </ul>
-    <% else %>
-      <div class="alert alert-info">
-        <%= Spree.t(:no_resource_found, resource: :stores) %>
-      </div>
-    <% end %>
+  <%= f.label :stores, Spree.t(:stores)%><br />
+  <% Spree::Store.get_stores(current_user, current_store).each do |store| %>
+    <div>
+      <%= check_box_tag "product[store_ids][]", store.id, @product.stores.include?(store) %> <%= store.name %>
+    </div>
   <% end %>
 </p>
 
